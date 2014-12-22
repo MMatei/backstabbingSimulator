@@ -1,0 +1,11 @@
+10
+banner_watch
+banner_stark
+banner_arryn
+banner_greyjoy
+banner_tully
+banner_lannister
+banner_baratheon
+banner_baratheon
+banner_tyrell
+banner_martell
