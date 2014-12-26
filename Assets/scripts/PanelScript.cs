@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterPanelScript : MonoBehaviour {
+public class PanelScript : MonoBehaviour {
 
     private GameObject panel;
     private RectTransform textureRect;
@@ -16,8 +16,8 @@ public class CharacterPanelScript : MonoBehaviour {
         closeButton = (RectTransform)panel.transform.GetChild(2).transform;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	// we need this to be called at precise moments, so we cannot rely on the default Update function
+	internal void _update () {
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 debugWorldClick = Camera.main.camera.ScreenToWorldPoint(Input.mousePosition);
@@ -26,7 +26,7 @@ public class CharacterPanelScript : MonoBehaviour {
             {
                 if (contains(closeButton, Input.mousePosition))
                 {
-                    Destroy(panel);
+                    panel.SetActive(false);// hide panel
                     return;
                 }
                 if (contains(textureRect, Input.mousePosition))

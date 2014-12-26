@@ -7,20 +7,17 @@ using System;
 
 public class GUIScript : MonoBehaviour {
 
-    public GameObject provincePanel;
-    public Canvas canvas;
-
 	private Texture2D[] banner;
-	private Texture2D guiTexture;
 	private byte[,] mapMatrix;
 	private float mapWorldWidth, mapWorldHeight, mapScreenWidth, mapScreenHeight;
 	private int currentSelected = 0;
 	private Rect guiRect, bannerRect;
-	public GUIStyle style;
 	Vector2 scrollPosition;
 
-    CharacterPanelScript characterPanel;
-    private GameObject instantiatedProvPanel = null;
+    // --- the UI panels and their associated scripts ---
+    private GameObject characterPanel;
+    private PanelScript characterPanelScript;
+
 	// Use this for initialization
 	void Start () {
 		//processProvincesBmp ();
@@ -32,20 +29,27 @@ public class GUIScript : MonoBehaviour {
 		GameObject map = GameObject.Find ("Map");
 		mapWorldWidth = map.renderer.bounds.size.x;//world coordinates
 		mapWorldHeight = map.renderer.bounds.size.y;
-		guiTexture = Resources.Load("parchment_texture") as Texture2D;
 
 		// Initialize texture rectangles, proportional to screen size
 		guiRect = new Rect (0, Screen.height - 255, Screen.width, 255);
 		bannerRect = new Rect (0, Screen.height - 255, 255, 255);
 
-        characterPanel = GameObject.Find("CharacterPanel").GetComponent<CharacterPanelScript>();
+        // Find the UI panels
+        characterPanel = GameObject.Find("CharacterPanel");
+        characterPanelScript = characterPanel.GetComponent<PanelScript>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        // First, we call the updates of the UI panels
+        // we do this because we need to know whether the mouse click is located inside a panel
+        // if so, we needn't treat that click here
+        characterPanelScript._update();
+
 		//button values are 0 for left button, 1 for right button, 2 for the middle button.
 		if (Input.GetMouseButtonDown (0)) {
-            if (!characterPanel.isDragging)
+            if (!characterPanelScript.isDragging) // clicked on the map
             {
                 Vector3 mouseWorldPoint = Camera.main.camera.ScreenToWorldPoint(Input.mousePosition);
                 int x = (int)(((mouseWorldPoint.x + mapWorldWidth / 2) / mapWorldWidth) * mapScreenWidth);
@@ -54,17 +58,13 @@ public class GUIScript : MonoBehaviour {
                 Debug.Log(currentSelected);
                 if (currentSelected != 0)
                 {
-                    if (instantiatedProvPanel == null)
-                    {
-                        Debug.Log("instantiate");
-                        instantiatedProvPanel = Instantiate(provincePanel, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                        instantiatedProvPanel.transform.SetParent(canvas.transform);
-                    }
-                    instantiatedProvPanel.GetComponentInChildren<Image>().sprite = Sprite.Create(banner[currentSelected], new Rect(0, 0, 1, 1), new Vector2(0, 0));
+                    // show panel and set relevant information
+                    characterPanel.SetActive(true);
+                    characterPanel.GetComponentInChildren<Image>().sprite = Sprite.Create(banner[currentSelected], new Rect(0, 0, 1, 1), new Vector2(0, 0));
                 }
                 else
-                {
-                    //Destroy(instantiatedProvPanel);
+                {// hide panel
+                    characterPanel.SetActive(false);
                 }
             }
 		}
