@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System;
 
 public class GUIScript : MonoBehaviour {
+
+    public GameObject provincePanel;
+    public Canvas canvas;
 
 	private Texture2D[] banner;
 	private Texture2D guiTexture;
@@ -16,6 +20,7 @@ public class GUIScript : MonoBehaviour {
 	Vector2 scrollPosition;
 
     CharacterPanelScript characterPanel;
+    private GameObject instantiatedProvPanel = null;
 	// Use this for initialization
 	void Start () {
 		//processProvincesBmp ();
@@ -46,6 +51,21 @@ public class GUIScript : MonoBehaviour {
                 int x = (int)(((mouseWorldPoint.x + mapWorldWidth / 2) / mapWorldWidth) * mapScreenWidth);
                 int y = (int)(((-mouseWorldPoint.y + mapWorldHeight / 2) / mapWorldHeight) * mapScreenHeight);
                 currentSelected = mapMatrix[y, x];
+                Debug.Log(currentSelected);
+                if (currentSelected != 0)
+                {
+                    if (instantiatedProvPanel == null)
+                    {
+                        Debug.Log("instantiate");
+                        instantiatedProvPanel = Instantiate(provincePanel, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                        instantiatedProvPanel.transform.SetParent(canvas.transform);
+                    }
+                    instantiatedProvPanel.GetComponentInChildren<Image>().sprite = Sprite.Create(banner[currentSelected], new Rect(0, 0, 1, 1), new Vector2(0, 0));
+                }
+                else
+                {
+                    //Destroy(instantiatedProvPanel);
+                }
             }
 		}
 	}

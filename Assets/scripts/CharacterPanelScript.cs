@@ -11,15 +11,17 @@ public class CharacterPanelScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        panel = GameObject.Find("CharacterPanel");
+        panel = gameObject;
         textureRect = (RectTransform)panel.transform;
-        closeButton = (RectTransform)GameObject.Find("Button").transform;
+        closeButton = (RectTransform)panel.transform.GetChild(2).transform;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
+            Vector3 debugWorldClick = Camera.main.camera.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log(debugWorldClick);
             if (panel != null)
             {
                 if (contains(closeButton, Input.mousePosition))
