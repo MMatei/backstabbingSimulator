@@ -7,7 +7,9 @@ using System;
 
 public class GUIScript : MonoBehaviour {
 
-	private Texture2D[] banner;
+    // Game data
+	private Province[] province;
+
 	private byte[,] mapMatrix;
 	private float mapWorldWidth, mapWorldHeight, mapScreenWidth, mapScreenHeight;
 	private int currentSelected = 0;
@@ -46,6 +48,7 @@ public class GUIScript : MonoBehaviour {
         // if so, we needn't treat that click here
         bool ignoreClick = false;
         ignoreClick |= characterPanelScript._update();
+        ignoreClick |= provincePanelScript._update();
 
 		//button values are 0 for left button, 1 for right button, 2 for the middle button.
 		if (Input.GetMouseButtonDown (0)) {
@@ -61,7 +64,7 @@ public class GUIScript : MonoBehaviour {
                     // show panel and set relevant information
                     provincePanel.SetActive(true);
                     // selected - 1 because the numbering starts from 0, yet province 0 is no man's land / empty
-                    provincePanelScript.setInformation(banner[currentSelected-1]);
+                    provincePanelScript.setInformation(province[currentSelected-1]);
                 }
                 else
                 {// hide panel
@@ -74,9 +77,11 @@ public class GUIScript : MonoBehaviour {
 	private void readLordsInfo() {
 		StreamReader reader = new StreamReader ("Assets/lords.txt");
 		int n = Convert.ToInt32(reader.ReadLine ());
-		banner = new Texture2D[n];
+        province = new Province[n];
 		for (int i = 0; i < n; i++) {
-			banner[i] = Resources.Load("banners/" + reader.ReadLine()) as Texture2D;
+            String[] piece = reader.ReadLine().Split(';');
+            province[i] = new Province();
+			province[i].owner = new State(piece[0], Resources.Load("banners/" + piece[1]) as Texture2D);
 		}
 	}
 

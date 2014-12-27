@@ -1,11 +1,11 @@
 10
-banner_martell
-banner_tyrell
-banner_baratheon
-banner_baratheon
-banner_lannister
-banner_tully
-banner_greyjoy
-banner_arryn
-banner_stark
-banner_watch
+House Martell;banner_martell
+House Tyrell;banner_tyrell
+House Baratheon;banner_baratheon
+House Baratheon;banner_baratheon
+House Lannister;banner_lannister
+House Tully;banner_tully
+House Greyjoy;banner_greyjoy
+House Arryn;banner_arryn
+House Stark;banner_stark
+The night's watch;banner_watch
