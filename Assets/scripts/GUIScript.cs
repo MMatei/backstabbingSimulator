@@ -16,9 +16,10 @@ public class GUIScript : MonoBehaviour {
 	Vector2 scrollPosition;
 
     // --- the UI panels and their associated scripts ---
-    private GameObject characterPanel, provincePanel;
+    internal static GameObject characterPanel, provincePanel, characterListPanel;
     private PanelScript characterPanelScript;
     private ProvincePanelScript provincePanelScript;
+    private CharacterListPanelScript characterListPanelScript;
 
 	// Use this for initialization
 	void Start () {
@@ -37,7 +38,11 @@ public class GUIScript : MonoBehaviour {
         characterPanelScript = characterPanel.GetComponent<PanelScript>();
         provincePanel = GameObject.Find("ProvincePanel");
         provincePanelScript = provincePanel.GetComponent<ProvincePanelScript>();
+        characterListPanel = GameObject.Find("CharacterListPanel");
+        characterListPanelScript = characterListPanel.GetComponent<CharacterListPanelScript>();
+        characterPanel.SetActive(false);
         provincePanel.SetActive(false);
+        characterListPanel.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -49,6 +54,7 @@ public class GUIScript : MonoBehaviour {
         bool ignoreClick = false;
         ignoreClick |= characterPanelScript._update();
         ignoreClick |= provincePanelScript._update();
+        ignoreClick |= characterListPanelScript._update();
 
 		//button values are 0 for left button, 1 for right button, 2 for the middle button.
 		if (Input.GetMouseButtonDown (0)) {
